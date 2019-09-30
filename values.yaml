@@ -1,0 +1,13 @@
+namespace: kyma-system
+image:
+  repository: eu.gcr.io/sap-se-cx-kyma-wookiee/hookyma
+  tag: latest
+  pullPolicy: IfNotPresent
+app:
+  name: hookyma
+  port: 80
+livenessProbe:
+  path: /healthz  
+readinessProbe:
+  path: /healthz
+targetPort: 80

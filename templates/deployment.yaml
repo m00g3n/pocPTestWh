@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ template "hookyma.name" . }}
+  namespace: {{ .Values.namespace }}
+  labels:
+    app: {{ .Values.app.name }}
+spec:
+  selector:
+    matchLabels:
+      app: {{ .Values.app.name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.app.name }}
+    spec:
+      terminationGracePeriodSeconds: 30
+      containers:
+        - name: {{ template "hookyma.fullname" . }}          
+          image: {{ .Values.image.repository }}:{{ .Values.image.tag }}    
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+            - name: PORT
+              value: "{{ .Values.app.port }}"
+          livenessProbe:
+            httpGet:
+              path: {{ .Values.livenessProbe.path }}
+              port: {{ .Values.app.port }}
+          readinessProbe:
+            httpGet:
+              path: {{ .Values.readinessProbe.path }}
+              port: {{ .Values.app.port }}
+          resources:
+            limits:
+              cpu: 10m
+              memory: 30Mi
+            requests:
+              cpu: 10m
+              memory: 30Mi

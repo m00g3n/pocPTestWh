@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "hookyma.name" . }}
+  labels:
+    app: {{ .Values.app.name }}
+  namespace: {{ .Values.namespace }}
+spec:
+  type: NodePort
+  ports:
+  - port: {{ .Values.app.port }}
+    targetPort: {{ .Values.targetPort }}
+    protocol: TCP
+    name: http
+  selector:
+    app: {{ .Values.app.name }}
